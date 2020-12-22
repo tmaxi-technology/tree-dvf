@@ -1,0 +1,54 @@
+<section>
+    <figure style="width: 100%;
+                    min-height: 740px;
+                    max-height: 950px;
+                    height: 100vh;
+                    border: 0px none !important;">
+        <div class="row" style="padding: 10px 25px">
+            <div class="md-col-3" style="padding: 0 20px">
+                <div class="row" style="margin-left: 0;padding-bottom: 30px;">
+                    <div class="md-col-5" style="padding-right: 50px;width: 160px">
+                        <div><b>Species</b></div>
+                        <div style="">
+                            <ngx-bootstrap-multiselect dynamicTitleMaxItems="2" [options]="speciesOptions" [settings]="speciesSettings" [(ngModel)]="speciesSelected" (ngModelChange)="onSpeciesChange($event)"></ngx-bootstrap-multiselect>
+                        </div>
+                    </div>
+                    <div class="md-col-5">
+                        <div><b>Plot size</b></div>
+                        <div style="">
+                            <ngx-bootstrap-multiselect dynamicTitleMaxItems="2" [options]="plotSizeOptions" [settings]="plotSizeSettings" [(ngModel)]="plotSizeSelected" (ngModelChange)="onPlotSizeChange($event)"></ngx-bootstrap-multiselect>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-left: 0;padding-bottom: 40px;">
+                    <div class="md-col-5" style="padding-right: 50px;width: 160px">
+                        <div><b>Legal Status</b></div>
+                        <div style="">
+                        <ngx-bootstrap-multiselect dynamicTitleMaxItems="2" [options]="legalStatusOptions" [settings]="legalStatusSettings" [(ngModel)]="legalStatusSelected" (ngModelChange)="onLegalStatusChange($event)"></ngx-bootstrap-multiselect>
+                        </div>
+                    </div>
+                    <div class="md-col-5" style="">
+                        <div><b>Permit Notes</b></div>
+                        <div style="">
+                        <ngx-bootstrap-multiselect dynamicTitleMaxItems="2" [options]="permitNotesOptions" [settings]="permitNotesSettings" [(ngModel)]="permitNotesSelected" (ngModelChange)="onPermitNotesChange($event)"></ngx-bootstrap-multiselect>
+                        </div>
+                    </div>
+                </div> 
+                <div><b>Number of Trees by Caretaker</b></div>
+                <div style="height: 200px">
+                    <div id="chart"></div>
+                </div>
+                <div><b>DBH: {{selectedDbh}}</b></div>
+                <div style="padding-left: 15px">
+                    <ng5-slider [(value)]="selectedDbh" [options]="selectedDbhOptions" (valueChange)="onDbhChange()"></ng5-slider>
+                    <div style="background-color: rgba(0,0,0,0.2)">Number of Trees : <span style="float: right"><b>{{numberTreesOfDbh}}</b></span></div>   
+                    <div id="scatter-chart"></div>
+                </div>
+            </div>
+            <div class="md-col-5">
+                <div id="base-map" style="height: 600px;width:1024px">
+                </div>            
+            </div>
+        </div>
+    </figure>
+</section>

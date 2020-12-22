@@ -1,0 +1,21 @@
+<div class="" style="padding: 0px 100px;text-align: center">
+  <div style="text-transform: uppercase"><div style="font-size: 24px;font-weight: bold;color: forestgreen;">Trực quan hóa có tương tác tìm kiếm trên bộ dữ liệu phân bố cây xanh</div></div>
+</div>
+<div class="row" style="margin-left: 0;padding-bottom: 0;">
+  <div class="md-col-5" style="padding-left: 30px;width: 100%">
+    <div>
+      <b style="padding-right: 20px">Switch to Advance</b>    
+      <div style="margin-top: -22px;margin-left: 160px;">        
+        <ui-switch [(ngModel)]="isLayout" size="small"></ui-switch>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div [hidden]="!isLayout">
+  <app-layout></app-layout>
+</div>
+<div [hidden]="isLayout">
+  <app-base></app-base>
+</div>
+<ngx-spinner></ngx-spinner>

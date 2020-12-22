@@ -1,0 +1,80 @@
+<div class="" style="padding: 0px 100px;text-align: center">
+  <div style="text-transform: uppercase"><h3>Dynamic query method for visualization based on <br>green tree data of San Francisco</h3></div>
+</div>
+<div class="row" style="margin-left: 0;padding-bottom: 0;">
+  <div class="md-col-5" style="padding-left: 100px;width: 100%">
+    <div>
+      <b style="padding-right: 20px">Switch Carto mode</b>    
+      <div style="margin-top: -22px;margin-left: 160px;">        
+        <ui-switch [(ngModel)]="cartoMode" size="small"></ui-switch>
+      </div>
+    </div>
+  </div>
+</div>
+<div [hidden]="cartoMode" class="row" style="padding: 10px 100px">
+  <div class="md-col-3" style="padding: 0 20px">
+    <div class="row" style="margin-left: 0;padding-bottom: 30px;">
+      <div class="md-col-5" style="padding-right: 50px;width: 160px">
+        <div><b>Species</b></div>
+        <div style="">
+          <ngx-bootstrap-multiselect dynamicTitleMaxItems="2" [options]="speciesOptions" [settings]="speciesSettings" [(ngModel)]="selectedSpecies" (ngModelChange)="onSpeciesChange($event)"></ngx-bootstrap-multiselect>
+        </div>
+      </div>
+      <div class="md-col-5">
+        <div><b>Plot size</b></div>
+        <div style="">
+          <ngx-bootstrap-multiselect dynamicTitleMaxItems="2" [options]="plotsizeOptions" [settings]="plotsizeSettings" [(ngModel)]="selectedPlotsize" (ngModelChange)="onPlotsizeChange($event)"></ngx-bootstrap-multiselect>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin-left: 0;padding-bottom: 40px;">
+      <div class="md-col-5" style="padding-right: 50px;width: 160px">
+        <div><b>Legal Status</b></div>
+        <div style="">
+          <ngx-bootstrap-multiselect dynamicTitleMaxItems="2" [options]="legalStatusOptions" [settings]="legalStatusSettings" [(ngModel)]="selectedLegalStatus" (ngModelChange)="onLegalStatusChange($event)"></ngx-bootstrap-multiselect>
+        </div>
+      </div>
+      <div class="md-col-5" style="">
+        <div><b>Permit Notes</b></div>
+        <div style="">
+          <ngx-bootstrap-multiselect dynamicTitleMaxItems="2" [options]="permitNotesOptions" [settings]="permitNotesSettings" [(ngModel)]="selectedPermitNotes" (ngModelChange)="onPermitNotesChange($event)"></ngx-bootstrap-multiselect>
+        </div>
+      </div>
+    </div>
+    <div><b>Time of Year: {{selectedTime}}</b></div>
+    <div style="padding-left: 15px;padding-bottom: 40px;">
+      <ng5-slider [(value)]="selectedTime" [options]="selectedTimeOptions" (valueChange)="onSelectedTimeChange()"></ng5-slider>
+      <div style="background-color: rgba(0,0,0,0.2)">Number of Trees : <span style="float: right"><b>{{numberTreesOfYear}}</b></span></div>   
+    </div>
+    <div><b>DBH: {{selectedDbh}}</b></div>
+    <div style="padding-left: 15px">
+      <ng5-slider [(value)]="selectedDbh" [options]="selectedDbhOptions" (valueChange)="onDbhChange()"></ng5-slider>
+      <div style="background-color: rgba(0,0,0,0.2)">Number of Trees : <span style="float: right"><b>{{numberTreesOfDbh}}</b></span></div>   
+      <div id="scatter-chart"></div>
+    </div>
+  </div>
+  <div class="md-col-5">
+    <div id="map" style="height: 550px;width:500px">
+    </div>
+  </div>
+  <div class="md-col-3" style="padding: 0 20px">
+    <div><b>Number of Trees by Caretaker</b></div>
+    <div style="height: 150px">
+      <div *ngFor="let item of caretakers;let i = index" style="padding-left: 15px">
+        <div *ngIf="i%2==0" style="background-color: rgba(0,0,0,0.08)">
+          <span>{{item.name}}</span><span style="float: right;font-weight: bold;color:{{colors[i]}}">{{item.values.length}}</span>      
+        </div>
+        <div *ngIf="i%2==1">
+          <span>{{item.name}}</span><span style="float: right;font-weight: bold;color:{{colors[i]}}">{{item.values.length}}</span>      
+        </div>
+      </div>   
+    </div>
+    <div id="chart"></div>
+    <div><b>Process for Planting</b></div>
+    <div id="histogram-chart"></div>
+  </div>
+</div>
+<div [hidden]="!cartoMode" style="padding: 0 100px" >
+  <app-layout></app-layout>
+</div>
+<ngx-spinner></ngx-spinner>

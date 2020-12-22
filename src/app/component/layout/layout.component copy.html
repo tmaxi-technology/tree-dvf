@@ -1,0 +1,60 @@
+<section>
+    <figure style="width: 100%;
+                    min-height: 740px;
+                    max-height: 950px;
+                    height: 100vh;
+                    border: 0px none !important;">
+    <div class="CovidExplorer is-embed">
+        <div class="ExplorerHeaderBox">hello</div>
+        <div class="ExplorerControlBar">hello</div>
+        <div class="CountryPicker">hello</div>
+        <div class="CovidExplorerFigure">
+            <div class="chart embed landscape" style="width: 1060px; height: 615px; font-size: 16px;">
+                <div class="HeaderHTML">header</div>
+                <div style="position: relative; clear: both; padding: 0px;">
+                    <div [hidden]="typePanel!==0">
+                        <div id="layout-chart"></div>
+                    </div>
+                    <div [hidden]="typePanel!==1">
+                        <div id="layout-map" style="height: 500px;calc(100%)px"></div>
+                    </div>
+                    <div [hidden]="typePanel!==2">
+                        table
+                    </div>
+                </div>
+                <footer clas="SourcesFooterHTML compact">footer</footer>
+                <div class="ControlsFooter" style="height: 64px;">
+                    <div  class="footerRowSingle">
+                        <div class="TimelineComponent">
+                            <div class="play">
+                                <i style="padding: 5px" class="fa fa-play" title="Play" *ngIf="!isPlay" aria-hidden="true" (click)="onPlayClick(true)"></i>
+                                <i style="padding: 5px" class="fa fa-stop" title="Stop" *ngIf="isPlay" aria-hidden="true" (click)="onPlayClick(fase)"></i>
+                            </div>
+                            <div class="date clickable">From year 1968</div>
+                            <div class="slider clickable">
+                                <ng5-slider [(value)]="timeSelected.start" [(highValue)]="timeSelected.end" [options]="timeOptions" (valueChange)="onTimeChange()"></ng5-slider>
+                            </div>
+                            <div class="date clickable">To year 2020</div>
+                        </div>
+                    </div>
+                    <div  class="footerRowSingle">
+                        <nav class="tabs">
+                            <ul>
+                                <li class="tab clickable" (click)="onPanelClick(0)" [ngClass]="{'active': typePanel===0}">
+                                    <a data-track-note="chart-click-chart">chart</a>
+                                </li>
+                                <li class="tab clickable" (click)="onPanelClick(1)"  [ngClass]="{'active': typePanel===1}">
+                                    <a data-track-note="chart-click-map">map</a>
+                                </li>
+                                <li class="tab clickable" (click)="onPanelClick(2)"  [ngClass]="{'active': typePanel===2}">
+                                    <a data-track-note="chart-click-table">table</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </figure>
+</section>
