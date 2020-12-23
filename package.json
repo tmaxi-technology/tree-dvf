@@ -4,6 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:prod": "node server.js",
+    "postinstall": "ng build --prod",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -22,6 +24,7 @@
     "@turf/turf": "^5.1.6",
     "bootstrap": "^4.5.3",
     "d3": "^6.2.0",
+    "express": "^4.17.1",
     "font-awesome": "^4.7.0",
     "highcharts": "^8.2.2",
     "jquery": "^3.5.1",
