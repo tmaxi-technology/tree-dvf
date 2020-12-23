@@ -17,6 +17,7 @@ declare let L: any;
 export class LayoutComponent implements OnInit {
 
   data: any;
+  colors: any[] = ["green", "blue", "red", "yellow", "cycan"];
   treesMarker: any;
   treesLayer: any;
   renderer: any;
@@ -40,6 +41,10 @@ export class LayoutComponent implements OnInit {
   scatter: any;
   histogramOptions: any;
   scatterOptions: any;
+
+  caretakers: any;
+  caretakersObject: any;
+  caretakersOptions: any;
 
   timeChartOptions: any;
   timeChartSelected: any;
@@ -83,8 +88,13 @@ export class LayoutComponent implements OnInit {
     this.startTime=moment("01/01/1968");
     this.timeObject={};
     this.speciesObject={};
+
     this.siteInfos=[];
     this.siteInfoObject={};
+
+    this.caretakers=[];
+    this.caretakersObject={};
+
     this.districtTable=[];
     this.firstDistrictTable=[];
     this.timeChartSelected = {
@@ -156,7 +166,8 @@ export class LayoutComponent implements OnInit {
           this.setupMask();
           this.setupHistogram();
           // this.setupScatter();
-          this.setupSiteInfoChart();
+          // this.setupSiteInfoChart();
+          this.setupCaretakersChart();
       }
     });
   }
@@ -414,6 +425,40 @@ export class LayoutComponent implements OnInit {
       }]
     };
   }
+  setupCaretakersChart(){
+    this.caretakersOptions ={
+      chart : {
+        plotBorderWidth: null,
+        plotShadow: false,
+        width: 300,
+        height: 200
+     },
+     title : {
+        text: undefined   
+     },
+     tooltip : {
+        pointFormat: '{series.name}: <b>{point.y}</b>'
+     },
+     plotOptions : {
+        pie: {
+           allowPointSelect: true,
+           cursor: 'pointer',
+           dataLabels: {
+              enabled: true,
+              format: '{point.percentage:.2f} %',
+              style: {
+                 color: 'black'
+              }
+           }
+        }
+     },
+     series : [{
+        type: 'pie',
+        name: 'Trees by Caretakers',
+        data: []
+      }]
+    };
+  }
   setupScatter(){
     this.scatterOptions={
       chart: {
@@ -522,6 +567,17 @@ export class LayoutComponent implements OnInit {
     };
   }
 
+  updateCaretakersChart(){
+    this.caretakersOptions.series[0].data = [];
+    _.each(this.caretakers, (item: any, i: any) => {
+      this.caretakersOptions.series[0].data.push({
+        name: item.name,
+        y: item.number,
+        color: this.colors[i]
+      })  
+    });
+    Highcharts.chart("layout-chart-caretaker", this.caretakersOptions);  
+  }
   updateSiteinfoChart(){
     this.siteInfoChartOptions.series[0].data = [];
     _.each(this.siteInfos, (item: any, i: any) => {
@@ -565,7 +621,8 @@ export class LayoutComponent implements OnInit {
     }
     this.districtMapObject={};
     this.speciesObject={};
-    this.siteInfoObject={};
+    // this.siteInfoObject={};
+    this.caretakersObject={};
     this.scatter=[];
     this.total=0;
     for(let i=this.timeChartSelected.start;i<=this.timeChartSelected.end;i++){
@@ -576,7 +633,8 @@ export class LayoutComponent implements OnInit {
         if(key)
           this.districtMapObject[key]=this.districtMapObject[key]?this.districtMapObject[key]+1:1;
           this.speciesObject[item[2]]=this.speciesObject[item[2]]?this.speciesObject[item[2]]+1:1;
-          this.siteInfoObject[item[5]]=this.siteInfoObject[item[5]]?this.siteInfoObject[item[5]]+1:1;
+          // this.siteInfoObject[item[5]]=this.siteInfoObject[item[5]]?this.siteInfoObject[item[5]]+1:1;
+          this.caretakersObject[item[7]]=this.caretakersObject[item[7]]?this.caretakersObject[item[7]]+1:1;
           this.total++;
           // this.scatter.push([item[10], parseInt(item[4])]);
       });
@@ -600,14 +658,23 @@ export class LayoutComponent implements OnInit {
       return -item.id;  
     });
 
-    let siteInfos=[];
-    _.each(Object.keys(this.siteInfoObject), (key: any, i: number) => {
-      siteInfos.push({ id: i, name: key, number: this.siteInfoObject[key]});
+    // let siteInfos=[];
+    // _.each(Object.keys(this.siteInfoObject), (key: any, i: number) => {
+    //   siteInfos.push({ id: i, name: key, number: this.siteInfoObject[key]});
+    // });
+    // siteInfos = _.sortBy(siteInfos, (item: any,i:any) => {        
+    //   return -item.number;  
+    // });
+    // this.siteInfos = siteInfos.slice(0,10);
+
+    let caretakers=[];
+    _.each(Object.keys(this.caretakersObject), (key: any, i: number) => {
+      caretakers.push({ id: i, name: key, number: this.caretakersObject[key]});
     });
-    siteInfos = _.sortBy(siteInfos, (item: any,i:any) => {        
+    caretakers = _.sortBy(caretakers, (item: any,i:any) => {        
       return -item.number;  
     });
-    this.siteInfos = siteInfos.slice(0,10);
+    this.caretakers = caretakers.slice(0,10);
 
     Highcharts.chart("layout-chart", this.chartOptions);  
   }
@@ -615,14 +682,16 @@ export class LayoutComponent implements OnInit {
     this.updateChart();
     this.updateHistogram();
     // this.updateScatter();
-    this.updateSiteinfoChart();
+    // this.updateSiteinfoChart();
+    this.updateCaretakersChart();
   }
 
   onTimeMapChange(){
     this.timeObject={};
     let startTime=moment("01/01/"+this.timeMapSelected.start);
     this.speciesObject={};
-    this.siteInfoObject={};
+    // this.siteInfoObject={};
+    this.caretakersObject={};
     this.scatter=[];
     this.total=0;
     for(let i=this.timeMapSelected.start;i<=this.timeMapSelected.end;i++){
@@ -632,7 +701,8 @@ export class LayoutComponent implements OnInit {
         this.data[id].forEach((item: any)=>{
           this.timeObject[item[20]]=this.timeObject[item[20]]?this.timeObject[item[20]]+1:1;
           this.speciesObject[item[2]]=this.speciesObject[item[2]]?this.speciesObject[item[2]]+1:1;
-          this.siteInfoObject[item[5]]=this.siteInfoObject[item[5]]?this.siteInfoObject[item[5]]+1:1;
+          // this.siteInfoObject[item[5]]=this.siteInfoObject[item[5]]?this.siteInfoObject[item[5]]+1:1;
+          this.caretakersObject[item[7]]=this.caretakersObject[item[7]]?this.caretakersObject[item[7]]+1:1;
           this.total++;
           // this.scatter.push([item[10], parseInt(item[4])]);
         });
@@ -671,18 +741,20 @@ export class LayoutComponent implements OnInit {
       return -item.id;  
     });
 
-    let siteInfos=[];
-    _.each(Object.keys(this.siteInfoObject), (key: any, i: number) => {
-      siteInfos.push({ id: i, name: key, number: this.siteInfoObject[key]});
+
+    let caretakers=[];
+    _.each(Object.keys(this.caretakersObject), (key: any, i: number) => {
+      caretakers.push({ id: i, name: key, number: this.caretakersObject[key]});
     });
-    siteInfos = _.sortBy(siteInfos, (item: any,i:any) => {        
+    caretakers = _.sortBy(caretakers, (item: any,i:any) => {        
       return -item.number;  
     });
-    this.siteInfos = siteInfos.slice(0,10);
+    this.caretakers = caretakers.slice(0,10);
 
     this.updateHistogram();  
     // this.updateScatter();
-    this.updateSiteinfoChart();
+    // this.updateSiteinfoChart();
+    this.updateCaretakersChart();
   }
   onTimeOverviewChange(){
     if(this.typePanel===2){
@@ -691,7 +763,8 @@ export class LayoutComponent implements OnInit {
       this.treesLayer.setData(this.treesMarker);
       let startTime=moment("01/01/"+this.timeMapSelected.start);
       this.speciesObject={};
-      this.siteInfoObject={};
+      // this.siteInfoObject={};
+      this.caretakersObject={};
       this.scatter=[];
       this.total=0;
       for(let i=this.timeOverviewSelected.start;i<=this.timeOverviewSelected.end;i++){
@@ -702,7 +775,8 @@ export class LayoutComponent implements OnInit {
             if(i<10000) {
               this.treesMarker.push([item[15], item[16]]);
               this.speciesObject[item[2]]=this.speciesObject[item[2]]?this.speciesObject[item[2]]+1:1;
-              this.siteInfoObject[item[5]]=this.siteInfoObject[item[5]]?this.siteInfoObject[item[5]]+1:1;
+              // this.siteInfoObject[item[5]]=this.siteInfoObject[item[5]]?this.siteInfoObject[item[5]]+1:1;
+              this.caretakersObject[item[7]]=this.caretakersObject[item[7]]?this.caretakersObject[item[7]]+1:1;
               this.total++;
               // this.scatter.push([item[10], parseInt(item[4])]);
             }
@@ -727,18 +801,27 @@ export class LayoutComponent implements OnInit {
         return -item.id;  
       });
   
-      let siteInfos=[];
-      _.each(Object.keys(this.siteInfoObject), (key: any, i: number) => {
-        siteInfos.push({ id: i, name: key, number: this.siteInfoObject[key]});
+      // let siteInfos=[];
+      // _.each(Object.keys(this.siteInfoObject), (key: any, i: number) => {
+      //   siteInfos.push({ id: i, name: key, number: this.siteInfoObject[key]});
+      // });
+      // siteInfos = _.sortBy(siteInfos, (item: any,i:any) => {        
+      //   return -item.number;  
+      // });
+      // this.siteInfos = siteInfos.slice(0,10);
+      let caretakers=[];
+      _.each(Object.keys(this.caretakersObject), (key: any, i: number) => {
+        caretakers.push({ id: i, name: key, number: this.caretakersObject[key]});
       });
-      siteInfos = _.sortBy(siteInfos, (item: any,i:any) => {        
+      caretakers = _.sortBy(caretakers, (item: any,i:any) => {        
         return -item.number;  
       });
-      this.siteInfos = siteInfos.slice(0,10);
-  
+      this.caretakers = caretakers.slice(0,10);
+
       this.updateHistogram();  
       // this.updateScatter();  
-      this.updateSiteinfoChart();
+      // this.updateSiteinfoChart();
+      this.updateCaretakersChart();
     }
   }
   onTimeTableChange(){
@@ -748,7 +831,8 @@ export class LayoutComponent implements OnInit {
     this.districtTable=[];
     this.firstDistrictTable=[];
     this.speciesObject={};
-    this.siteInfoObject={};
+    // this.siteInfoObject={};
+    this.caretakersObject={};
     this.scatter=[];
     this.total=0;
     for(let i=this.timeTableSelected.start;i<=this.timeTableSelected.end;i++){
@@ -758,7 +842,8 @@ export class LayoutComponent implements OnInit {
         if(key){
           this.districtTableObject[key]=this.districtTableObject[key]?this.districtTableObject[key]+1:1;
           this.speciesObject[item[2]]=this.speciesObject[item[2]]?this.speciesObject[item[2]]+1:1;
-          this.siteInfoObject[item[5]]=this.siteInfoObject[item[5]]?this.siteInfoObject[item[5]]+1:1;
+          // this.siteInfoObject[item[5]]=this.siteInfoObject[item[5]]?this.siteInfoObject[item[5]]+1:1;
+          this.caretakersObject[item[7]]=this.caretakersObject[item[7]]?this.caretakersObject[item[7]]+1:1;
           this.total++;
           // this.scatter.push([item[10], parseInt(item[4])]);
         }
@@ -785,18 +870,27 @@ export class LayoutComponent implements OnInit {
       return -item.id;  
     });
 
-    let siteInfos=[];
-    _.each(Object.keys(this.siteInfoObject), (key: any, i: number) => {
-      siteInfos.push({ id: i, name: key, number: this.siteInfoObject[key]});
+    // let siteInfos=[];
+    // _.each(Object.keys(this.siteInfoObject), (key: any, i: number) => {
+    //   siteInfos.push({ id: i, name: key, number: this.siteInfoObject[key]});
+    // });
+    // siteInfos = _.sortBy(siteInfos, (item: any,i:any) => {        
+    //   return -item.number;  
+    // });
+    // this.siteInfos = siteInfos.slice(0,10);
+    let caretakers=[];
+    _.each(Object.keys(this.caretakersObject), (key: any, i: number) => {
+      caretakers.push({ id: i, name: key, number: this.caretakersObject[key]});
     });
-    siteInfos = _.sortBy(siteInfos, (item: any,i:any) => {        
+    caretakers = _.sortBy(caretakers, (item: any,i:any) => {        
       return -item.number;  
     });
-    this.siteInfos = siteInfos.slice(0,10);
+    this.caretakers = caretakers.slice(0,10);
 
     this.updateHistogram();    
     // this.updateScatter();
-    this.updateSiteinfoChart();
+    // this.updateSiteinfoChart();
+    this.updateCaretakersChart();
   }
   onPanelClick(type: any){
     this.typePanel = type;

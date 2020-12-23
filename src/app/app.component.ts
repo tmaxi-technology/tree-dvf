@@ -645,7 +645,7 @@ export class AppComponent implements OnInit{
       });
     });
     this.histogramOptions.series[0].data = this.histogram;
-    Highcharts.chart("histogram-chart", this.histogramOptions);  
+    // Highcharts.chart("histogram-chart", this.histogramOptions);  
   }
 
   addTree(item: any){
@@ -773,7 +773,7 @@ export class AppComponent implements OnInit{
   }
   updateScatter(){
     this.scatterOptions.series[0].data = this.scatter;
-    this.scatterChart = Highcharts.chart("scatter-chart", this.scatterOptions);  
+    // this.scatterChart = Highcharts.chart("scatter-chart", this.scatterOptions);  
   }
   updateChart(){
     this.chartOptions.series[0].data = [];
@@ -784,7 +784,7 @@ export class AppComponent implements OnInit{
         color: this.colors[i]
       })  
     });
-    this.chart = Highcharts.chart("chart", this.chartOptions);  
+    // this.chart = Highcharts.chart("chart", this.chartOptions);  
   }
 
   updateCaretaker(features: any){
