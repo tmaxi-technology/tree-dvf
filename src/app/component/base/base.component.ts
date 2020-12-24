@@ -148,7 +148,7 @@ export class BaseComponent implements OnInit {
     this.setupChart();
     this.setupDrawing();
 
-    d3.json('./assets/trees-data.json').then((data: any) => {
+    d3.json('./assets/new-trees-data.json').then((data: any) => {
       this.data = data;
       console.log(data[0]);
 
@@ -218,10 +218,10 @@ export class BaseComponent implements OnInit {
 
       let features = [];
       _.each(this.data, (item: any, i: number) => {
-        if(i<100000){
+        // if(i<100000){
           // this.addTree(item);
           features.push(item);
-        }
+        // }
       });
       this.numberTreesOfDbh = data.length;
       this.treesLayer = L.layerGroup(this.treesMarker);
@@ -245,7 +245,7 @@ export class BaseComponent implements OnInit {
       this.treesMarker = [];
       let features = [];
       _.each(this.data, (item: any, i: number) => {
-        if(i<100000){
+        // if(i<100000){
             if((value.length == 0)){
               this.addTree(item);
               features.push(item);
@@ -258,7 +258,7 @@ export class BaseComponent implements OnInit {
                 }
               });
             }    
-        }
+        // }
       });
 
       this.treesLayer = L.layerGroup(this.treesMarker);
@@ -278,7 +278,7 @@ export class BaseComponent implements OnInit {
       this.treesMarker = [];
       let features = [];
       _.each(this.data, (item: any, i: number) => {
-        if(i<100000){
+        // if(i<100000){
             if((value.length == 0)){
               this.addTree(item);
               features.push(item);
@@ -291,7 +291,7 @@ export class BaseComponent implements OnInit {
                 }
               });
             }    
-        }
+        // }
       });
 
       _.each(features, (item: any, i: number) => {
@@ -314,7 +314,7 @@ export class BaseComponent implements OnInit {
       this.treesMarker = [];
       let features = [];
       _.each(this.data, (item: any, i: number) => {
-        if(i<100000){
+        // if(i<100000){
             if((value.length == 0)){
               this.addTree(item);
               features.push(item);
@@ -327,7 +327,7 @@ export class BaseComponent implements OnInit {
                 }
               });
             }    
-        }
+        // }
       });
 
       _.each(features, (item: any, i: number) => {
@@ -350,7 +350,7 @@ export class BaseComponent implements OnInit {
       this.treesMarker = [];
       let features = [];
       _.each(this.data, (item: any, i: number) => {
-        if(i<100000){
+        // if(i<100000){
             if((value.length == 0)){
               this.addTree(item);
               features.push(item);
@@ -365,7 +365,7 @@ export class BaseComponent implements OnInit {
                 }
               });
             }    
-        }
+        // }
       });
 
       _.each(features, (item: any, i: number) => {
@@ -392,14 +392,14 @@ export class BaseComponent implements OnInit {
       this.numberTreesOfDbh = 0;
       _.each(this.data, (item: any, i: number) => {
         // let year =new Date(item.PlantDate);
-        if(i<100000){
+        // if(i<100000){
           if(item.DBH <= this.selectedDbh){      
             this.numberTreesOfDbh++;     
             this.addTree(item);
             // this.scatter.push([item.DBH, item.SiteOrder]);
             features.push(item);
           }
-        }
+        // }
       });
 
       // _.each(features, (item: any, i: number) => {
@@ -509,18 +509,18 @@ export class BaseComponent implements OnInit {
       });
       if(type=="circle"){
         _.each(this.data, (item: any, i: number) => {
-          if(i<100000){
+          // if(i<100000){
             let year =new Date(item.PlantDate);
             if(year.getFullYear() <= this.selectedTime && this.map.distance([item.Latitude, item.Longitude], [layer._latlng.lat, layer._latlng.lng]) < layer._mRadius){
               this.addTree(item);
               features.push(item);
             }
-          }
+          // }
         });
       }
       if(type=="polygon" || type=="rectangle"){
         _.each(this.data, (item: any, i: number) => {
-          if(i<100000){
+          // if(i<100000){
             let points= [];
             _.each(layer._latlngs[0], (item:any) => {
               points.push([item.lat, item.lng]);
@@ -535,7 +535,7 @@ export class BaseComponent implements OnInit {
               this.addTree(item);
               features.push(item);
             }
-          }
+          // }
         });
       }
 
